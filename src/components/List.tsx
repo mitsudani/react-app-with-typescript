@@ -7,7 +7,7 @@ interface Props {
   }>;
 }
 
-export default function List({ subs }: Props) {
+const List = ({ subs }: Props) => {
   return (
     <ul>
       {subs.map((sub) => {
@@ -23,4 +23,6 @@ export default function List({ subs }: Props) {
       })}
     </ul>
   );
-}
+};
+
+export default List;

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import Form from "./components/Form";
 import List from "./components/List";
 
 interface Sub {
@@ -41,6 +42,7 @@ function App() {
     <div className="App">
       <h1>Midu subs</h1>
       <List subs={subs} />
+      <Form />
     </div>
   );
 }
