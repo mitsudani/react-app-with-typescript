@@ -1,9 +1,9 @@
 import "./App.css";
 import Form from "./components/Form";
 import List from "./components/List";
-import axios from "axios";
 import { useEffect, useState, useRef } from "react";
-import { Sub, SubsResponseFromApi } from "./types";
+import { Sub } from "./types";
+import { getAllSubs } from "./services/getAllSubs";
 
 interface AppState {
   subs: Array<Sub>;
@@ -16,39 +16,7 @@ function App() {
     useState<AppState["newSubsNumber"]>(0);
 
   useEffect(() => {
-    const fetchSubs = (): Promise<SubsResponseFromApi> => {
-      // Axios
-      return (
-        axios
-          // <SubsResponseFromApi> can be added after .get instead of adding it in the function
-          .get("https://apimocha.com/mitsudani/subs")
-          .then((response) => response.data)
-      );
-
-      // Fetch example
-      // return fetch("https://apimocha.com/mitsudani/subs").then((res) =>
-      //   res.json()
-      // );
-    };
-
-    const mapFromApiToSubs = (apiResponse: SubsResponseFromApi): Array<Sub> => {
-      return apiResponse.map((subFromApi) => {
-        const {
-          nick,
-          months: subMonths,
-          profileUrl: avatar,
-          description,
-        } = subFromApi;
-        return {
-          nick,
-          avatar,
-          subMonths,
-          description,
-        };
-      });
-    };
-
-    fetchSubs().then(mapFromApiToSubs).then(setSubs);
+    getAllSubs().then(setSubs);
   }, []);
 
   const divRef = useRef<HTMLDivElement>(null);
