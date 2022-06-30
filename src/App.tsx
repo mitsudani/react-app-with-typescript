@@ -1,6 +1,7 @@
 import "./App.css";
 import Form from "./components/Form";
 import List from "./components/List";
+import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { Sub, SubsResponseFromApi } from "./types";
 
@@ -16,9 +17,18 @@ function App() {
 
   useEffect(() => {
     const fetchSubs = (): Promise<SubsResponseFromApi> => {
-      return fetch("https://apimocha.com/mitsudani/subs").then((res) =>
-        res.json()
+      // Axios
+      return (
+        axios
+          // <SubsResponseFromApi> can be added after .get instead of adding it in the function
+          .get("https://apimocha.com/mitsudani/subs")
+          .then((response) => response.data)
       );
+
+      // Fetch example
+      // return fetch("https://apimocha.com/mitsudani/subs").then((res) =>
+      //   res.json()
+      // );
     };
 
     const mapFromApiToSubs = (apiResponse: SubsResponseFromApi): Array<Sub> => {
