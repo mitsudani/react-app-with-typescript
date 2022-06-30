@@ -1,27 +1,13 @@
-import { useEffect, useState, useRef } from "react";
 import "./App.css";
 import Form from "./components/Form";
 import List from "./components/List";
-import { Sub } from "./types";
+import { useEffect, useState, useRef } from "react";
+import { Sub, SubsResponseFromApi } from "./types";
 
 interface AppState {
   subs: Array<Sub>;
   newSubsNumber: number;
 }
-
-const INITIAL_STATE = [
-  {
-    nick: "dapelu",
-    subMonths: 3,
-    avatar: "https://i.pravatar.cc/150?u=dapelu",
-    description: "Dapelu hace de moderador a veces",
-  },
-  {
-    nick: "sergio_serrano",
-    subMonths: 7,
-    avatar: "https://i.pravatar.cc/150?u=sergio_serrano",
-  },
-];
 
 function App() {
   const [subs, setSubs] = useState<AppState["subs"]>([]);
@@ -29,18 +15,44 @@ function App() {
     useState<AppState["newSubsNumber"]>(0);
 
   useEffect(() => {
-    setSubs(INITIAL_STATE);
+    const fetchSubs = (): Promise<SubsResponseFromApi> => {
+      return fetch("https://apimocha.com/mitsudani/subs").then((res) =>
+        res.json()
+      );
+    };
+
+    const mapFromApiToSubs = (apiResponse: SubsResponseFromApi): Array<Sub> => {
+      return apiResponse.map((subFromApi) => {
+        const {
+          nick,
+          months: subMonths,
+          profileUrl: avatar,
+          description,
+        } = subFromApi;
+        return {
+          nick,
+          avatar,
+          subMonths,
+          description,
+        };
+      });
+    };
+
+    fetchSubs().then(mapFromApiToSubs).then(setSubs);
   }, []);
+
   const divRef = useRef<HTMLDivElement>(null);
 
   const handleNewSub = (newSub: Sub): void => {
     setSubs((sub) => [...subs, newSub]);
+    setNewSubsNumber((n) => n + 1);
   };
 
   return (
     <div className="App" ref={divRef}>
       <h1>Midu subs</h1>
       <List subs={subs} />
+      New subs: {newSubsNumber}
       <Form onNewSub={handleNewSub} />
     </div>
   );
