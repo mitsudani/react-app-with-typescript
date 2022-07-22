@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+This project is about handling weekly budget, following couse: "REACT + TYPESCRIPT: Creando un proyecto desde cero y paso a paso" by Midudev (https://www.youtube.com/c/midudev)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
